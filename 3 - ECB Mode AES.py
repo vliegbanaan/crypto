@@ -19,8 +19,8 @@ def ECB_decrypt(ciphertext, key):
         decrypted plaintext
     """
 
-    print('Decrypting ciphertext:', ciphertext)
-    print('Deze key wordt:', key)
+    print('Magische tekst :', ciphertext)
+    print('Deze key wordt gebruikt:', key)
 
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
