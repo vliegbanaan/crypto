@@ -19,12 +19,12 @@ def ECB_decrypt(ciphertext, key):
         decrypted plaintext
     """
 
-    print('Magische tekst :', ciphertext)
+    print('Magische tekst:', ciphertext)
     print('Deze key wordt gebruikt:', key)
 
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
-    return plaintext
+  
 
     with open('file3.txt', 'rb') as f:  # Open bestand en ga door content heen. RB gebruiken we om het bestand in binary mode te lezen.
      ciphertext = f.read()
@@ -33,10 +33,10 @@ def ECB_decrypt(ciphertext, key):
     
     plaintext = ECB_decrypt(ciphertext, key)   
     print(plaintext.decode('utf-8')) # Print decrypted bytes to text, hiervoor gebruiken we char encoding zoals utf-8.
+    return plaintext
 
 # Laat deze asserts onaangetast & onderaan je code!
 ciphertext = b64decode('86ueC+xlCMwpjrosuZ+pKCPWXgOeNJqL0VI3qB59SSY=')
 key = b'SECRETSAREHIDDEN'
 assert ECB_decrypt(ciphertext, key)[:28] == \
     b64decode('SGFzdCBkdSBldHdhcyBaZWl0IGZ1ciBtaWNoPw==')
-
