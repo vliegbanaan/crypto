@@ -49,36 +49,37 @@ def CBC_decrypt(ciphertext, key, iv):
  
     print('cipher na padding toevoegen: ', ciphertext_padded)                                   #test om cipher text te zien met added padding
     
-    # Split the ciphertext into 16-byte blocks
+    # Split de ciphertext in 16 byte blokken
     blocks = [ciphertext_padded[i:i+16] for i in range(0, len(ciphertext_padded), 16)]
     print('Dit zijn de blocks: ', blocks)
 
-    # Create an empty list to store the plaintext blocks
+    # Lege lijst om plaintext blocks in op te slaan.
     plaintext_blocks = []
 
-    # Iterate over the blocks and decrypt them using CBC mode
+    # Iterate over de blokken heen en decrypt ze d.m.v. CBC
     for i in range(len(blocks)):
-        # XOR the block with the previous ciphertext block or initialization vector (iv)
+        # XOR het block met de vorige ciphertext blok, anders vector INIT (IV)
         if i == 0:
-            # For the first block, use the iv
+            # Voor het eerste blok, gebruik IV.
             xor_input = repeating_key_xor(blocks[i], iv)
             print('Dit is een test: ', xor_input)
         else:
-            # For subsequent blocks, use the previous ciphertext block
+            # For volgende blokken, gebruik de vorige ciphertext blok.
             xor_input = repeating_key_xor(blocks[i], plaintext_blocks[i-1])
             print('Dit is de XOR input: ', xor_input)
-        # Decrypt the block using ECB mode with the key
+        # Decrypt de blok d.m.v. ECB.
         plaintext_block = ECB_decrypt(xor_input, key)
         print('Dit is de plaintext block na het decrypten via ECB met de key: ', plaintext_block)
-        # Append the decrypted block to the list of plaintext blocks
+        # Append de decrypted block aan de lijst van plaintext blocks.
         plaintext_blocks.append(plaintext_block)
         print('Dit is de plaintext na het toevoegen van de decrypted block aan de plaintext block: ', plaintext_block)
 
-    # Concatenate the plaintext blocks and return the decrypted plaintext
-    plaintext = b''.join(plaintext_blocks)
-    print('Dit is plantext blocks: ', plaintext_blocks)
+    # Concatenate de plaintext blokken en return de decrypted plaintext. and return the decrypted plaintext
+    plaintext = b''.join([plaintext_block])
+    print('Dit is plaintext blocks: ', plaintext_blocks)
 
-    # Remove the padding from the plaintext
+    # Reverwijder de padding van de plaintext.
+    move the padding from the plaintext
     padding_length = plaintext[-1]
     plaintext = plaintext[:-padding_length]
     print('Dit is de plaintext na het verwijderen van de padding en het uitvoeren van de XOR: ', plaintext)

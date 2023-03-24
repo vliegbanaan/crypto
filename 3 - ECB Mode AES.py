@@ -32,11 +32,13 @@ def ECB_decrypt(ciphertext, key):
     key = b'SECRETSAREHIDDEN'
     
     plaintext = ECB_decrypt(ciphertext, key)   
-    print(plaintext.decode('utf-8')) # Print decrypted bytes to text, hiervoor gebruiken we char encoding zoals utf-8.
-    return plaintext
+    print(plaintext.decode('utf-8')) # Print decrypted bytes naar tekst, hiervoor gebruiken we char encoding zoals utf-8.
+
 
 # Laat deze asserts onaangetast & onderaan je code!
 ciphertext = b64decode('86ueC+xlCMwpjrosuZ+pKCPWXgOeNJqL0VI3qB59SSY=')
 key = b'SECRETSAREHIDDEN'
 assert ECB_decrypt(ciphertext, key)[:28] == \
     b64decode('SGFzdCBkdSBldHdhcyBaZWl0IGZ1ciBtaWNoPw==')
+
+    return plaintext
