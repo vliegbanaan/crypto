@@ -93,8 +93,6 @@ def CBC_decrypt(ciphertext, key, iv):
 
     return plaintext
 
-
-
 # Decrypt the ciphertext using CBC mode with AES encryption
 plaintext = CBC_decrypt(a_ciphertext, a_key, a_IV)
 

@@ -87,7 +87,9 @@ def ECB_decrypt(ciphertext, key):
     """
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
+    print('hoi1', plaintext)
     return plaintext
+
 
 # Laat dit blok code onaangetast & onderaan je code!
 a_ciphertext = b64decode('e8Fa/QnddxdVd4dsL7pHbnuZvRa4OwkGXKUvLPoc8ew=')
