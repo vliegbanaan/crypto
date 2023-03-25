@@ -1,5 +1,6 @@
 from base64 import b64decode
 from Crypto.Cipher import AES
+import os
 
 def ECB_decrypt(ciphertext, key):
     """Accepts a ciphertext in byte-form,
@@ -19,26 +20,21 @@ def ECB_decrypt(ciphertext, key):
         decrypted plaintext
     """
 
-    print('Magische tekst:', ciphertext)
-    print('Deze key wordt gebruikt:', key)
-
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
-  
 
-    with open('file3.txt', 'rb') as f:  # Open bestand en ga door content heen. RB gebruiken we om het bestand in binary mode te lezen.
-     ciphertext = f.read()
+    return plaintext
 
-    key = b'SECRETSAREHIDDEN'
-    
-    plaintext = ECB_decrypt(ciphertext, key)   
-    print(plaintext.decode('utf-8')) # Print decrypted bytes naar tekst, hiervoor gebruiken we char encoding zoals utf-8.
+# open tekst.txt en lees de inhoud
+with open('tekst.txt', 'rb') as f:
+    ciphertext = f.read()
 
+# decodeer ciphertext met de opgegeven key
+key = b'SECRETSAREHIDDEN'
+plaintext = ECB_decrypt(ciphertext, key)
 
 # Laat deze asserts onaangetast & onderaan je code!
 ciphertext = b64decode('86ueC+xlCMwpjrosuZ+pKCPWXgOeNJqL0VI3qB59SSY=')
 key = b'SECRETSAREHIDDEN'
 assert ECB_decrypt(ciphertext, key)[:28] == \
     b64decode('SGFzdCBkdSBldHdhcyBaZWl0IGZ1ciBtaWNoPw==')
-
-    return plaintext
