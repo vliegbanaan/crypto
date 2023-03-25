@@ -1,25 +1,6 @@
 from base64 import b64decode
 from Crypto.Cipher import AES
-
-def repeating_key_xor(ciphertext, key):
-    """Takes two bytestrings and XORs them, returning a bytestring.
-    Extends the key to match the text length.
-    
-    Parameters
-    ----------
-    text : bytes
-        bytes-object to be xor'd w/ key
-    key : bytes
-        bytes-object to be xor'd w/ text
-        
-    Returns
-    -------
-    bytes
-        binary XOR of text & key
-    """
-    key = key * (len(ciphertext) // len(key)) + key[:len(ciphertext) % len(key)]
-    xor_output = bytes([ciphertext[x] ^ key[x] for x in range(len(ciphertext))])
-    return xor_output
+from Crypto.Util.Padding import unpad
 
 
 def CBC_decrypt(ciphertext, key, iv):
@@ -61,17 +42,27 @@ def CBC_decrypt(ciphertext, key, iv):
         # Append the decrypted block to the list of plaintext blocks
         plaintext_blocks.append(plaintext_block)
 
-    # Concatenate the plaintext blocks and return the first 18 bytes of the decrypted plaintext
-    plaintext = b''.join(plaintext_blocks)[:18]
-
-    print('lengte van de IV is', len(iv))                                   #Test voor lengte IV.
-    print('lengte van de key is: ', len(key))                               #Test voor lengthe key.
-    print('Ciphertext is: ', type(a_ciphertext))                            #Test voor lengthe ciphertext.
-    print('key is een', type(a_key))                                        #Test voor datatype key.
-    print('IV is een', type(a_IV))                                          #Test voor datatype vector.
-    return plaintext
-
+        print(f"Block {i}:\nCiphertext: {blocks[i]}\nXOR input: {xor_input}\nPlaintext: {plaintext_block}\n")           #controle op inhoud van Ciphertext,Xor_input en Plaintext.
     
+    # Concatenate the plaintext blocks and return the decrypted plaintext
+    plaintext = b''.join(plaintext_blocks)
+
+    print('Decrypted plaintext:', plaintext)
+    print('Verwachte plaintext:', b64decode('eW91IGtub3cgdGhlIHJ1bGVz'))
+
+    return plaintext
+        
+
+
+
+
+    # print('lengte van de IV is', len(iv))                                   #Test voor lengte IV.
+    # print('lengte van de key is: ', len(key))                               #Test voor lengthe key.
+    # print('Ciphertext is: ', type(a_ciphertext))                            #Test voor lengthe ciphertext.
+    # print('key is een', type(a_key))                                        #Test voor datatype key.
+    # print('IV is een', type(a_IV))                                          #Test voor datatype vector.
+    # return plaintext
+
 def ECB_decrypt(ciphertext, key):
     """Accepts a ciphertext in byte-form,
     as well as 16-byte key, and returns 
@@ -92,6 +83,29 @@ def ECB_decrypt(ciphertext, key):
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
     return plaintext
+
+def repeating_key_xor(ciphertext, key):
+    """Takes two bytestrings and XORs them, returning a bytestring.
+    Extends the key to match the text length.
+
+    Parameters
+    ----------
+    ciphertext : bytes
+        bytes-object to be xor'd w/ key
+    key : bytes
+        bytes-object to be xor'd w/ text
+
+    Returns
+    -------
+    bytes
+        binary XOR of text & key
+    """
+    
+    key = key * (len(ciphertext) // len(key)) + key[:len(ciphertext) % len(key)]
+    xor_output = bytes([ciphertext[x] ^ key[x] for x in range(len(ciphertext))])
+    return xor_output
+
+
 
 # Laat dit blok code onaangetast & onderaan je code!
 a_ciphertext = b64decode('e8Fa/QnddxdVd4dsL7pHbnuZvRa4OwkGXKUvLPoc8ew=')
