@@ -88,9 +88,6 @@ def CBC_decrypt(ciphertext, key, iv):
     plaintext = b''.join(plaintext_blocks)
     return plaintext
 
-
-
-
 # Laat dit blok code onaangetast & onderaan je code!
 a_ciphertext = b64decode('e8Fa/QnddxdVd4dsL7pHbnuZvRa4OwkGXKUvLPoc8ew=')
 a_key = b'SECRETSAREHIDDEN'

@@ -65,25 +65,24 @@ def find_block_length():
     blocksize : integer
         blocksize used by ECB oracle
     """
-    # Start with a one-byte input
-    input_text = b"A"
-
-    # Keep encrypting until the ciphertext changes
-    prev_ciphertext = ECB_oracle(input_text)
-    while True:
-        input_text += b"A"
-        ciphertext = ECB_oracle(input_text)
-        if ciphertext[:len(prev_ciphertext)] != prev_ciphertext:
-            # Block size is the difference in length between the two ciphertexts
-            return len(ciphertext) - len(prev_ciphertext)
-        prev_ciphertext = ciphertext
-
-# Roep de functie aan om de grootte van het blok te vinden
-block_size = find_block_length()
-
-# Gebruik de block_size om de rest van je code te schrijven
-print("Block size:", block_size)
-
-return blocksize
+    single_block = b'X'*16                                      # Start met een enkel byteblok
+    ciphertext = ECB_oracle(single_block, key)                  # Roep de orakel-functie aan met de reeks van één byte.
+    prev_len = len(ciphertext)                                  # Houd de lengte van de ciphertekst bij.
+                 
+    # Blijf de lengte van het plaintextblok vergroten
+    # en roep de orakel-functie aan totdat de lengte van de ciphertekst verandert
+    for i in range(2, 17):
+        plaintext = b'X'*i
+        ciphertext = ECB_oracle(plaintext, key)
+        print(f"Plaintext lengte is: {i}, ciphertext lengte is: {len(ciphertext)}")
+        if len(ciphertext) != prev_len:
+            # De blokgrootte is de verandering in lengte
+            blocksize = len(ciphertext) - len(plaintext)          
+            print(f"Plaintext lengte is: {i}, ciphertext lengte is: {len(ciphertext)}, blokgrootte is: {blocksize}")
+            return blocksize
+        prev_len = len(ciphertext)
+    print()
+    print("De blokgrootte kon niet worden gevonden.")
+    return None
 
 
