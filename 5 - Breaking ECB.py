@@ -52,14 +52,10 @@ def ECB_oracle(plaintext, key):
 # Genereer een willekeurige key
 key = token_bytes(16)
 
-
-
 #####################################
 ###  schrijf hieronder jouw code  ###
 ### verander code hierboven niet! ###
 #####################################
-
-
 
 def find_block_length():
     """Finds the block length used by the ECB oracle.
@@ -69,30 +65,44 @@ def find_block_length():
     blocksize : integer
         blocksize used by ECB oracle
     """
-    single_block = b'X'*16                                      # Start met een enkel byteblok
-    ciphertext = ECB_oracle(single_block, key)                  # Roep de orakel-functie aan met de reeks van één byte.
-    prev_len = len(ciphertext)                                  # Houd de lengte van de ciphertekst bij.
-                 
-    # Blijf de lengte van het plaintextblok vergroten
-    # en roep de orakel-functie aan totdat de lengte van de ciphertekst verandert
-    for i in range(2, 17):
-        plaintext = b'X'*i
-        # print(f"Dit is de plaintekst voordat de ECB_oracle() functie wordt aangeroepen: {plaintext}")
-        ciphertext = ECB_oracle(plaintext, key)
-        print(f"Plaintext lengte is: {i}, ciphertext lengte is: {len(ciphertext)}")
-        if len(ciphertext) != prev_len:
-            # De blokgrootte is de verandering in lengte, DUH
-            blocksize = len(ciphertext) - len(plaintext)          
-            print(f"Plaintext lengte is: {i}, ciphertext lengte is: {len(ciphertext)}, blokgrootte is: {blocksize}")
-            print(f"dit is de plaintext: {plaintext}")
-            return blocksize
-        prev_len = len(ciphertext)
 
-# test om bloksize te zien en deze weer te te geven.
-blocksize = find_block_length() 
-print(f"De blocksize is: {blocksize}")
+    # Start met een enkele byte
+    prev_ct = ECB_oracle(b'X', key)
 
-# Maak de juiste plaintext
-padding_byte = bytes([0x00])
-plaintext = padding_byte * (blocksize - 1)
-ciphertext = ECB_oracle(plaintext, key)
+    # Ga door met toevoegen met bytes tot de ciphertekst niet meer veranderd..
+    for i in range(2, 17):          # 17 hier om ervoor te zorgen dat het tot en met 16 bytes gevuld wordt.
+        curr_pt = bytes('X'*i, 'utf-8')
+        curr_ct = ECB_oracle(curr_pt, key)
+        if curr_ct[:i] == prev_ct[:i]:
+            print('Blocksize:', i - 1)
+            return i - 1
+        else:
+            print(f'Ciphertext {i}:')                                   #print ciphertext met index
+            for j in range(len(curr_ct)):
+                print('{:02X} '.format(curr_ct[j]), end='')
+            print()                                                     #lege regel
+        prev_ct = curr_ct
+
+    # Blocksize is gevonden.
+    raise ValueError('\nBlocksize is bereikt, groter dan dit gaan we niet vriend.\n')
+    # print(f'Dit is de blocksize van de oracle'{i}) #ik wil hier blocksize + index ervan hebben..
+
+try:
+    blocksize = find_block_length()
+except ValueError as e:
+    print(e)
+    blocksize = 5
+
+# Genereer een blok van bytes dat een byte minder is dan de blocksize.
+single_block = b'X' * (blocksize - 1)
+
+# Encrypt de blok door gebruik te maken van de ECB-Oracle.
+ciphertext = ECB_oracle(single_block, key)
+
+# Print de laatste ciphertext, dus de laatstePrint the resulting ciphertext
+print("Laatste ciphertekst is : \n", end=" ")
+for byte in ciphertext:
+    print("{:02x}".format(byte), end=" ")
+print()
+
+

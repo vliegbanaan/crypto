@@ -1,38 +1,27 @@
 from base64 import b64decode
 from Crypto.Cipher import AES
-import os
 
 def ECB_decrypt(ciphertext, key):
-    """Accepts a ciphertext in byte-form,
-    as well as 16-byte key, and returns 
-    the corresponding plaintext.
+    """
+    Decrypteert een gegeven ciphertext met behulp van een AES-sleutel en retourneert de plaintext.
 
     Parameters
     ----------
     ciphertext : bytes
-        ciphertext to be decrypted
+        Een bytes-object van de ciphertext die gedecrypteerd moet worden met de 'key'.
     key : bytes
-        key to be used in decryption
+        Een bytes-object van de AES-sleutel die gebruikt moet worden om de 'ciphertext' te decrypteren. Moet 16 bytes lang zijn.
 
     Returns
     -------
     bytes
-        decrypted plaintext
+        Gedecrypteerde plaintext.
     """
-
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
 
+    print(plaintext.decode('utf-8'))
     return plaintext
-
-# open tekst.txt en lees de inhoud
-with open('tekst.txt', 'rb') as f:
-    ciphertext = f.read()
-
-# decodeer ciphertext met de opgegeven key
-key = b'SECRETSAREHIDDEN'
-plaintext = ECB_decrypt(ciphertext, key)
-print(plaintekst)
 
 # Laat deze asserts onaangetast & onderaan je code!
 ciphertext = b64decode('86ueC+xlCMwpjrosuZ+pKCPWXgOeNJqL0VI3qB59SSY=')

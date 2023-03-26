@@ -1,5 +1,4 @@
 from base64 import b64encode
-
 def fixed_length_xor(text, key):
     """
     Performs a binary XOR of two equal-length strings. 
@@ -41,8 +40,13 @@ def repeating_key_xor(text, key):
     bytes
         binary XOR of text & key
     """
-    key = key * (len(text) // len(key)) + key[:len(text) % len(key)]
-    xor_output = bytes([text[x] ^ key[x] for x in range(len(text))])
+    # Key wordt vermenigvbuldig met aantal keren dat het in text past door de floor division (//), hierdoor is er een herhaling van key die even lang is als text.
+    # De resterende tekens die niet zijn opgenomen in de vermenigvuldiging worden aan het einde toegevoegd door de slice(:)
+    key = key * (len(text) // len(key)) + key[:len(text) % len(key)] 
+
+    # de range functie genereert een reeks getallen van 0 tot en met de lengte van text.  deze reeks getallen wordt gebruikt om door tekens van tekst en key te iteraten.
+    # Voor elk getal 'x' in de reeks wordt de xor(^) uitgevoerd op de tekens van text en key op index x.
+    xor_output = bytes([text[x] ^ key[x] for x in range(len(text))])        
     print(text)
     return xor_output
 
