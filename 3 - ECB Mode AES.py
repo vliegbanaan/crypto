@@ -32,6 +32,7 @@ with open('tekst.txt', 'rb') as f:
 # decodeer ciphertext met de opgegeven key
 key = b'SECRETSAREHIDDEN'
 plaintext = ECB_decrypt(ciphertext, key)
+print(plaintekst)
 
 # Laat deze asserts onaangetast & onderaan je code!
 ciphertext = b64decode('86ueC+xlCMwpjrosuZ+pKCPWXgOeNJqL0VI3qB59SSY=')

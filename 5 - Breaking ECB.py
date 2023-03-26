@@ -52,10 +52,14 @@ def ECB_oracle(plaintext, key):
 # Genereer een willekeurige key
 key = token_bytes(16)
 
+
+
 #####################################
 ###  schrijf hieronder jouw code  ###
 ### verander code hierboven niet! ###
 #####################################
+
+
 
 def find_block_length():
     """Finds the block length used by the ECB oracle.
@@ -73,16 +77,22 @@ def find_block_length():
     # en roep de orakel-functie aan totdat de lengte van de ciphertekst verandert
     for i in range(2, 17):
         plaintext = b'X'*i
+        # print(f"Dit is de plaintekst voordat de ECB_oracle() functie wordt aangeroepen: {plaintext}")
         ciphertext = ECB_oracle(plaintext, key)
         print(f"Plaintext lengte is: {i}, ciphertext lengte is: {len(ciphertext)}")
         if len(ciphertext) != prev_len:
-            # De blokgrootte is de verandering in lengte
+            # De blokgrootte is de verandering in lengte, DUH
             blocksize = len(ciphertext) - len(plaintext)          
             print(f"Plaintext lengte is: {i}, ciphertext lengte is: {len(ciphertext)}, blokgrootte is: {blocksize}")
+            print(f"dit is de plaintext: {plaintext}")
             return blocksize
         prev_len = len(ciphertext)
-    print()
-    print("De blokgrootte kon niet worden gevonden.")
-    return None
 
+# test om bloksize te zien en deze weer te te geven.
+blocksize = find_block_length() 
+print(f"De blocksize is: {blocksize}")
 
+# Maak de juiste plaintext
+padding_byte = bytes([0x00])
+plaintext = padding_byte * (blocksize - 1)
+ciphertext = ECB_oracle(plaintext, key)

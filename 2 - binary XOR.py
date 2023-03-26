@@ -43,7 +43,7 @@ def repeating_key_xor(text, key):
     """
     key = key * (len(text) // len(key)) + key[:len(text) % len(key)]
     xor_output = bytes([text[x] ^ key[x] for x in range(len(text))])
-    print(xor_output)
+    print(text)
     return xor_output
 
 # Laat deze asserts onaangetast! OK IS GOED
