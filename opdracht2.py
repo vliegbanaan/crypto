@@ -17,8 +17,8 @@ def fixed_length_xor(text, key):
         binary XOR of text & key
     """
     
-    xor_output = bytes([y ^ z for y, z in zip(text, key)])  # Ga text en key byte for byte bij lang en XOR deze, voeg dit toe aan de var xor_output. // geadapteerd van https://nitratine.net/blog/post/xor-python-byte-strings/
-    print(b64encode(xor_output))    # Human readable bytes. doet verder niks.
+    xor_output = bytes([y ^ z for y, z in zip(text, key)])  
+    print(b64encode(xor_output)) 
     return xor_output
 
 
@@ -42,10 +42,10 @@ def repeating_key_xor(text, key):
     bytes
         binary XOR of text & key
     """
-    key = key * (len(text) // len(key)) + key[:len(text) % len(key)]    # Verleng key door deze eerst te vermenigvuldigen met een afgeronde deling van len(text) en len(key). tel hier vervolgens het restant op dat is verkregen door 
+    key = key * (len(text) // len(key)) + key[:len(text) % len(key)]    
 
 
-    xor_output = bytes([y ^ z for y, z in zip(text, key)]) # Ga text en key byte for byte bij lang en XOR deze, voeg dit toe aan de var xor_output. // geadapteerd van https://nitratine.net/blog/post/xor-python-byte-strings/
+    xor_output = bytes([y ^ z for y, z in zip(text, key)]) 
     print(b64encode(xor_output))
     return xor_output
 
