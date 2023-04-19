@@ -1,4 +1,5 @@
 from base64 import b64encode
+
 def fixed_length_xor(text, key):
     """
     Performs a binary XOR of two equal-length strings. 
@@ -15,12 +16,13 @@ def fixed_length_xor(text, key):
     bytes
         binary XOR of text & key
     """
-
-    # XOR door elke byte heen
-    xor_output = bytes([text[x] ^ key[x] for x in range(len(text))])
+    
+    xor_output = bytes([y ^ z for y, z in zip(text, key)])  # Ga text en key byte for byte bij lang en XOR deze, voeg dit toe aan de var xor_output. // geadapteerd van https://nitratine.net/blog/post/xor-python-byte-strings/
+    print(b64encode(xor_output))    # Human readable bytes. doet verder niks.
     return xor_output
 
-# Laat deze asserts onaangetast! OK IS GOED
+
+# Laat deze asserts onaangetast!
 assert type(fixed_length_xor(b'foo',b'bar')) == bytes
 assert b64encode(fixed_length_xor(b'foo',b'bar')) == b'BA4d'
 
@@ -40,17 +42,14 @@ def repeating_key_xor(text, key):
     bytes
         binary XOR of text & key
     """
-    # Key wordt vermenigvbuldig met aantal keren dat het in text past door de floor division (//), hierdoor is er een herhaling van key die even lang is als text.
-    # De resterende tekens die niet zijn opgenomen in de vermenigvuldiging worden aan het einde toegevoegd door de slice(:)
-    key = key * (len(text) // len(key)) + key[:len(text) % len(key)] 
+    key = key * (len(text) // len(key)) + key[:len(text) % len(key)]    # Verleng key door deze eerst te vermenigvuldigen met een afgeronde deling van len(text) en len(key). tel hier vervolgens het restant op dat is verkregen door 
 
-    # de range functie genereert een reeks getallen van 0 tot en met de lengte van text.  deze reeks getallen wordt gebruikt om door tekens van tekst en key te iteraten.
-    # Voor elk getal 'x' in de reeks wordt de xor(^) uitgevoerd op de tekens van text en key op index x.
-    xor_output = bytes([text[x] ^ key[x] for x in range(len(text))])        
-    print(text)
+
+    xor_output = bytes([y ^ z for y, z in zip(text, key)]) # Ga text en key byte for byte bij lang en XOR deze, voeg dit toe aan de var xor_output. // geadapteerd van https://nitratine.net/blog/post/xor-python-byte-strings/
+    print(b64encode(xor_output))
     return xor_output
 
-# Laat deze asserts onaangetast! OK IS GOED
+# Laat deze asserts onaangetast!
 assert type(repeating_key_xor(b'all too many words',b'bar')) == bytes
 assert b64encode(repeating_key_xor(b'all too many words',b'bar'))\
-   == b'Aw0eQhUdDUEfAw8LQhYdEAUB'
+    == b'Aw0eQhUdDUEfAw8LQhYdEAUB'

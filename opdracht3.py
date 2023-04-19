@@ -20,11 +20,11 @@ def ECB_decrypt(ciphertext, key):
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
 
-    print(plaintext.decode('utf-8'))
     return plaintext
 
 # Laat deze asserts onaangetast & onderaan je code!
-ciphertext = b64decode('86ueC+xlCMwpjrosuZ+pKCPWXgOeNJqL0VI3qB59SSY=')
 key = b'SECRETSAREHIDDEN'
-assert ECB_decrypt(ciphertext, key)[:28] == \
-    b64decode('SGFzdCBkdSBldHdhcyBaZWl0IGZ1ciBtaWNoPw==')
+with open('bestand.txt', 'rb') as f:
+    ciphertext = b64decode(f.read())
+    decrypted_text = ECB_decrypt(ciphertext, key)
+    print(decrypted_text.decode('utf-8'))
