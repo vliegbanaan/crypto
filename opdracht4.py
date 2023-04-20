@@ -2,18 +2,17 @@ from Crypto.Cipher import AES
 from base64 import b64decode
 
 def repeating_key_xor(text, key):
-     """Takes two bytestrings and XORs them, returning a bytestring.
-    Extends the key to match the text length.
+    """
+    Voert XOR uit tussen twee bytestrings en retourneert een bytestring.
+    De sleutel wordt uitgebreid om overeen te komen met de lengte van de tekst.
     
-    Parameters
-    ----------
+    Parameters:
     text : bytes
         bytes-object to be xor'd w/ key
     key : bytes
         bytes-object to be xor'd w/ text
         
-    Returns
-    -------
+    Returns:
     bytes
         binary XOR of text & key
     """
@@ -26,15 +25,13 @@ def ECB_decrypt(ciphertext, key):
     """
     Decrypt een gegeven ciphertext met behulp van een AES-sleutel en retourneert de plaintext.
 
-    Parameters
-    ----------
+    Parameters:
     ciphertext : bytes
         Een bytes-object van de ciphertext die decrypted moet worden met de 'key'.
     key : bytes
         Een bytes-object van de AES-sleutel die gebruikt moet worden om de 'ciphertext' te decrypten. Moet 16 bytes lang zijn.
 
-    Returns
-    -------
+    Returns:
     bytes
         Decrypted plaintext.
     """

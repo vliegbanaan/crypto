@@ -5,13 +5,11 @@ def b64_to_string(b64String):
     """
     Converts a given b64-string to its ASCII equivalent.
 
-    Parameters
-    ----------
+    Parameters:
     b64String : bytes
         b64-encoded bytesobject to be converted
 
-    Returns
-    -------
+    Returns:
     string
         ASCII string
     """

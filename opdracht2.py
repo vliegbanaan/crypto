@@ -27,18 +27,17 @@ assert type(fixed_length_xor(b'foo',b'bar')) == bytes
 assert b64encode(fixed_length_xor(b'foo',b'bar')) == b'BA4d'
 
 def repeating_key_xor(text, key):
-    """Takes two bytestrings and XORs them, returning a bytestring.
+    """
+    Takes two bytestrings and XORs them, returning a bytestring.
     Extends the key to match the text length.
     
-    Parameters
-    ----------
+    Parameters:
     text : bytes
         bytes-object to be xor'd w/ key
     key : bytes
         bytes-object to be xor'd w/ text
         
-    Returns
-    -------
+    Returns:
     bytes
         binary XOR of text & key
     """
