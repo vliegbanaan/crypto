@@ -66,17 +66,17 @@ def find_block_length():
     Returns:
         int: De grootte van het blok dat wordt gebruikt door de ECB_oracle-functie.
     """
-    plaintext = b'A'
-    blocksize = len(ECB_oracle(plaintext, key))
-    print("Lengte van de ciphertext: ", len(ECB_oracle(plaintext, key)))
+    plaintext = b'A'                                                                                        # Init plaintekst met enkele byte.                                                                            
+    blocksize = len(ECB_oracle(plaintext, key))                                                             # Bepaal de grootte van het blok dat wordt gebruikt in ECB-oracle().    
+    print("Lengte van de ciphertext: ", len(ECB_oracle(plaintext, key)))                                    # Versleutel de plaintext met de ECB-oracle() met behulp van de key en print de lengte van de ciphertext.
     
-    while True:
-        plaintext += b'A'
-        new_ciphertext = ECB_oracle(plaintext, key)
+    while True:                                                                                             # Iteratief proces uit om de blokgrootte verandering te detecteren
+        plaintext += b'A'                                                                                   # Init plaintekst met enkele byte.     
+        new_ciphertext = ECB_oracle(plaintext, key)                                                         # Genereer een nieuwe ciphertext met de bijgewerkte plaintext
 
-        if len(new_ciphertext) > blocksize:
-            print("Blokgrootte = ", len(new_ciphertext) - blocksize)
-            return len(new_ciphertext) - blocksize
+        if len(new_ciphertext) > blocksize:                                                                 # Check of blockgrootte veranderd is. 
+            print("Blokgrootte = ", len(new_ciphertext) - blocksize)                                        # Bereken de verandering in blokgrootte en print deze.
+            return len(new_ciphertext) - blocksize                                                          # Eindig de lus en geef de grootte weer.
 
 def find_secret_text():
     """
@@ -87,31 +87,31 @@ def find_secret_text():
     Returns:
         bytes: De geheime tekst die is gebruikt door de ECB_oracle-functie.
     """
-    secret_text_bytes = b''
-    block_size = find_block_length()
-    ciphertext_bytes = ECB_oracle(b'', key)
-    temp_block_list = []
-    ascii_list = [chr(byte) for byte in range(256)] 
+    secret_text_bytes = b''                                                                                 # Init de geheime tekst als lege byte string.
+    block_size = find_block_length()                                                                        # Bepaal de grootte van het blok dat wordt gebruikt in de ECB_oracle-functie door gebruik te maken van find_block_length().
+    ciphertext_bytes = ECB_oracle(b'', key)                                                                 # Genereer de oorspronkelijke ciphertext met een lege plaintext.
+    temp_block_list = []                                                                                    # Lege lijst om blokken van tijdelijke tekst in te bewaren.
+    ascii_list = [chr(byte) for byte in range(256)]                                                         # Lijst met alle ASCII-tekens.
 
-    for i in range(0, len(ciphertext_bytes), block_size):
+    for i in range(0, len(ciphertext_bytes), block_size):                                                   
         for j in range(0, block_size):
-            for ascii_char in ascii_list: 
+            for ascii_char in ascii_list:                                                                   # Loop door alle ASCII-tekens heen.
 
-                temp_text_bytes = b'X' * (block_size - 1 - j) + secret_text_bytes 
-                new_bytes = temp_text_bytes + ascii_char.encode() 
-                new_ciphertext_bytes = ECB_oracle(new_bytes, key) 
-                temp_block_list.append(new_ciphertext_bytes[i:i+block_size])               
+                temp_text_bytes = b'X' * (block_size - 1 - j) + secret_text_bytes                           # Voeg de geraden tekens toe aan de temp tekst.
+                new_bytes = temp_text_bytes + ascii_char.encode()                                           # Voeg het nieuwe te raden teken toe aan de temp tekst.
+                new_ciphertext_bytes = ECB_oracle(new_bytes, key)                                           # Versleutel de voorlopige tekst met het ECB-oracle key.
+                temp_block_list.append(new_ciphertext_bytes[i:i+block_size])                                # Voeg het resulterende blok toe aan de lijst met temp blokken.
     
-            temp_text_bytes = b'X' * (block_size - 1 - j)
-            new_ciphertext_bytes = ECB_oracle(temp_text_bytes, key)
-            temp_block = new_ciphertext_bytes[i:i+block_size] 
+            temp_text_bytes = b'X' * (block_size - 1 - j)                                                   # Voeg de  geraden tekens toe aan de temp tekst.
+            new_ciphertext_bytes = ECB_oracle(temp_text_bytes, key)                                         # Versleutel de voorlopige tekst met het ECB-oracle key.
+            temp_block = new_ciphertext_bytes[i:i+block_size]                                               # Maak een slice van de nieuwe ciphertext bytes die overeenkomt met het huidige blok en wijs deze toe aan temp_block.
             
-            if temp_block in temp_block_list: 
-                secret_text_bytes += bytes([temp_block_list.index(temp_block)]) 
-            temp_block_list = [] 
+            if temp_block in temp_block_list:                                                               # Check of temp)block overeenkomt met een block in temp_block_list
+                secret_text_bytes += bytes([temp_block_list.index(temp_block)])                             # Voeg het juist geraden teken toe aan geheime tekst.
+            temp_block_list = []                                                                            #Wis de lijst met tijdelijke blokken na elke iteratie.
     
-    secret_text_str = secret_text_bytes.decode('utf-8')
-    print("Geheime tekst: ", secret_text_str)
+    secret_text_str = secret_text_bytes.decode('utf-8')                                                     #Decode de bytestring (Secret tekst) naar een unicode string.
+    print("Geheime tekst: ", secret_text_str)                                                               #print geheime tekst.
     return secret_text_bytes
     
 find_secret_text()
