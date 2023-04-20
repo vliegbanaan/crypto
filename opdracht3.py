@@ -3,7 +3,7 @@ from Crypto.Cipher import AES
 
 def ECB_decrypt(ciphertext, key):
     """
-    Decrypteert een gegeven ciphertext met behulp van een AES-sleutel en retourneert de plaintext.
+    Decrypt een gegeven ciphertext met behulp van een AES-sleutel en retourneert de plaintext.
 
     Parameters
     ----------
@@ -15,7 +15,7 @@ def ECB_decrypt(ciphertext, key):
     Returns
     -------
     bytes
-        Gedecrypteerde plaintext.
+        Decrypted plaintext.
     """
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
