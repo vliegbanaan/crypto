@@ -93,14 +93,14 @@ def find_secret_text():
     temp_block_list = []                                                                                    # Lege lijst om blokken van tijdelijke tekst in te bewaren.
     ascii_list = [chr(byte) for byte in range(256)]                                                         # Lijst met alle ASCII-tekens.
 
-    for i in range(0, len(ciphertext_bytes), block_size):                                                   
-        for j in range(0, block_size):
+    for i in range(0, len(ciphertext_bytes), block_size):                                                   # Ciphertekst wordt opgedeeld in blokken van grootte van block_size.   
+        for j in range(0, block_size):                                                                      # Loop door het aantal bytes in het blok dat gebruikt wordt.
             for ascii_char in ascii_list:                                                                   # Loop door alle ASCII-tekens heen.
 
-                temp_text_bytes = b'X' * (block_size - 1 - j) + secret_text_bytes                           # Voeg de geraden tekens toe aan de temp tekst.
-                new_bytes = temp_text_bytes + ascii_char.encode()                                           # Voeg het nieuwe te raden teken toe aan de temp tekst.
+                temp_text_bytes = b'X' * (block_size - 1 - j) + secret_text_bytes                           # Voeg de geraden tekens toe aan de temp tekst. de J geeft de huidige positie aan van te raden teken. eerste keer is secret text leeg.
+                new_bytes = temp_text_bytes + ascii_char.encode()                                           # Vervang x door het geraden ASCII teken.
                 new_ciphertext_bytes = ECB_oracle(new_bytes, key)                                           # Versleutel de voorlopige tekst met het ECB-oracle key.
-                temp_block_list.append(new_ciphertext_bytes[i:i+block_size])                                # Voeg het resulterende blok toe aan de lijst met temp blokken.
+                temp_block_list.append(new_ciphertext_bytes[i:i+block_size])                                # Maak een slice van de nieuwe ciphertext bytes die overeenkomt met het huidige blok en wijs deze toe aan temp_block.
     
             temp_text_bytes = b'X' * (block_size - 1 - j)                                                   # Voeg de  geraden tekens toe aan de temp tekst.
             new_ciphertext_bytes = ECB_oracle(temp_text_bytes, key)                                         # Versleutel de voorlopige tekst met het ECB-oracle key.
